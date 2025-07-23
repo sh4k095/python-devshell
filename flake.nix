@@ -27,7 +27,7 @@
           ]))
       ];
       shellHook = ''
-        jupyter-lab
+        jupyter-lab ~
       '';
     };
   };
