@@ -11,33 +11,67 @@
     ...
   } @ inputs: let
     system = "x86_64-linux";
-    pkgs = import nixpkgs {inherit system;};
-    VASPio = pkgs.python3Packages.buildPythonPackage rec {
+    pkgs = import nixpkgs {inherit system; config.allowUnfree = true;};
+    VASPio = pkgs.python312Packages.buildPythonPackage rec {
       pname = "vaspio";
       version = "0.1.0";
       format = "setuptools";
       src = pkgs.fetchFromGitHub {
         owner = "sh4k095";
         repo = "VASPio";
-        rev = "df0a5432ecc62de15ae8410c14f8b2e96951f3f7";
+        rev = version;
         hash = "sha256-Y9WCExaAbm/FWf0IZld9X3cc2fu4cOewKzlhVKlcrbE=";
       };
-      build-system = with pkgs.python3Packages; [
-        setuptools
-        wheel
+      dependencies = with pkgs.python312Packages; [
+        ase
+        pymatgen
       ];
     };
+    tensorpotential = pkgs.python312Packages.buildPythonPackage rec {
+      pname = "tensorpotential";
+      version = "0.5.1";
+      format = "setuptools";
+      src = pkgs.fetchFromGitHub {
+        owner = "ICAMS";
+        repo = "grace-tensorpotential";
+        rev = version;
+        hash = "sha256-nVIHW2aiV79Ul07lqt/juGc8oPYJUeb7TLtqMyOQjGs";
+      };
+      dependencies = let
+        matscipy = pkgs.python312Packages.buildPythonPackage rec {
+          pname = "matscipy";
+          version = "1.1.1";
+          pyproject = true;
+          src = pkgs.fetchFromGitHub {
+            owner = "libAtoms";
+            repo = "matscipy";
+            rev = version;
+            hash = "sha256-mVN+9PTwEMD24KV3Eyp0Jq4vgA1Zs+jThdEbVcfs6pw=";
+          };
+        };
+        in with pkgs.python312Packages; [
+          tensorflow
+          keras
+          scipy
+          matscipy
+          numpy
+          sympy
+          pandas
+          ase
+          pyyaml
+          tqdm
+        ];
+      };
     in {
     devShells.${system}.default = pkgs.mkShell {
       buildInputs = with pkgs; [
         (python312.withPackages (python-pkgs:
           with python-pkgs; [
-            ase
             numpy
             scipy
-            pymatgen
             matplotlib
             ovito
+            jupyterlab
           ]))
       ] ++ [ VASPio ];
       env = {
