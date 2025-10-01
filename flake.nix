@@ -50,7 +50,10 @@
         sha256 = "sha256-oi5rr5k1YhtmpHm0sbIlkycqslI/yT99qmQysUfqmmQ=";
       };
       nativeBuildInputs = [pkgs.which];
-      propagatedBuildInputs = with pkgs.python312Packages; [numpy ase];
+      dependencies = with pkgs.python312Packages; [
+        numpy
+        ase
+      ];
     };
     #matscipy = pkgs.python312Packages.buildPythonPackage rec {
     #  pname = "matscipy";
@@ -126,7 +129,8 @@
             VASPio
             ovito
             asap3
-          ]))
+          ]
+        ))
       ];
       env = {
         PSEUDOPATH = "/home/sh4k0/Dropbox/POSTDOC/RESEARCH/POTPAW";
