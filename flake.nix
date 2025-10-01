@@ -20,7 +20,7 @@
       src = pkgs.fetchFromGitHub {
         owner = "sh4k095";
         repo = "VASPio";
-        rev = version;
+        rev = "df0a5432ecc62de15ae8410c14f8b2e96951f3f7";
         hash = "sha256-Y9WCExaAbm/FWf0IZld9X3cc2fu4cOewKzlhVKlcrbE=";
       };
       dependencies = with pkgs.python312Packages; [
@@ -39,6 +39,18 @@
       nativeBuildInputs = [pkgs.autoPatchelfHook];
       autoPatchelfIgnoreMissingDeps = ["libcuda.so.1" "libnvidia-ml.so.1"];
       propagatedBuildInputs = with pkgs.python312Packages; [numpy traits pyside6];
+    };
+    asap3 = pkgs.python312Packages.buildPythonPackage rec {
+      pname = "asap3";
+      version = "3.13.9";
+      build-system = [pkgs.python312Packages.setuptools];
+      pyproject = true;
+      src = pkgs.fetchurl {
+        url = "https://files.pythonhosted.org/packages/0e/ef/5a62fb53c3b59fb61a4b59c89115cd23c53f132c406793fa569d194418db/asap3-3.13.9.tar.gz";
+        sha256 = "sha256-oi5rr5k1YhtmpHm0sbIlkycqslI/yT99qmQysUfqmmQ=";
+      };
+      nativeBuildInputs = [pkgs.which];
+      propagatedBuildInputs = with pkgs.python312Packages; [numpy ase];
     };
     #matscipy = pkgs.python312Packages.buildPythonPackage rec {
     #  pname = "matscipy";
@@ -110,9 +122,10 @@
             numpy
             scipy
             matplotlib
-            ovito
-            VASPio
             jupyterlab
+            VASPio
+            ovito
+            asap3
           ]))
       ];
       env = {
