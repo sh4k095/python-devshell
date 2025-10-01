@@ -45,8 +45,8 @@
       version = "3.13.9";
       build-system = [pkgs.python312Packages.setuptools];
       pyproject = true;
-      src = pkgs.fetchurl {
-        url = "https://files.pythonhosted.org/packages/0e/ef/5a62fb53c3b59fb61a4b59c89115cd23c53f132c406793fa569d194418db/asap3-3.13.9.tar.gz";
+      src = pkgs.fetchPypi {
+        inherit pname version;
         sha256 = "sha256-oi5rr5k1YhtmpHm0sbIlkycqslI/yT99qmQysUfqmmQ=";
       };
       nativeBuildInputs = [pkgs.which];
